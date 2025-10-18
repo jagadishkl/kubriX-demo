@@ -3,23 +3,43 @@ keycloak:
   # ingress tls not implemented yet, we need to create our own ingress resource
     enabled: false
 
-  readinessProbe:
-    periodSeconds: 20
-    failureThreshold: 5
-  livenessProbe:
-    periodSeconds: 20
-    failureThreshold: 5
-  startupProbe:
-    periodSeconds: 20
-    failureThreshold: 5
+readinessProbe:
+  httpGet:
+    path: /health/ready
+    port: 8080
+    scheme: HTTP
+  periodSeconds: 20
+  failureThreshold: 5
+  successThreshold: 1
+  timeoutSeconds: 1
 
-  resources:
-    requests:
-      memory: "512Mi"
-      cpu: "300m"
-    limits:
-      memory: "1Gi"
-      cpu: "1"
+livenessProbe:
+  httpGet:
+    path: /health/live
+    port: 8080
+    scheme: HTTP
+  periodSeconds: 20
+  failureThreshold: 5
+  successThreshold: 1
+  timeoutSeconds: 1
+
+startupProbe:
+  httpGet:
+    path: /health/started
+    port: 8080
+    scheme: HTTP
+  periodSeconds: 20
+  failureThreshold: 5
+  successThreshold: 1
+  timeoutSeconds: 1
+
+resources:
+  requests:
+    memory: "512Mi"
+    cpu: "150m"
+  limits:
+    memory: "1Gi"
+    cpu: "1"
 
   networkPolicy:
     enabled: false

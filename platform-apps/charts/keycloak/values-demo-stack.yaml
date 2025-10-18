@@ -60,6 +60,8 @@ resources:
       name: cp-keycloak-externaldb-secret
       key: POSTGRES_PASSWORD
     port: 5432
+    host: sv-keycloak-cluster-rw
+    database: keycloak
 
 #### kubrix
 kubrix:

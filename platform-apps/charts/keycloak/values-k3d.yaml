@@ -1,17 +1,38 @@
 keycloak:
   ingress:
-  # ingress tls not implemented yet, we need to create our own ingress resource
     enabled: false
+
+  http:
+    httpEnabled: true
+    httpPort: 8080
+    httpsPort: 8443
+
+  httpManagement:
+    port: 8080
 
   readinessProbe:
     periodSeconds: 20
     failureThreshold: 5
+    httpGet:
+      path: /q/health/ready
+      port: 8080
+      scheme: HTTP
+
   livenessProbe:
     periodSeconds: 20
     failureThreshold: 5
+    httpGet:
+      path: /q/health/live
+      port: 8080
+      scheme: HTTP
+
   startupProbe:
     periodSeconds: 20
     failureThreshold: 5
+    httpGet:
+      path: /q/health/started
+      port: 8080
+      scheme: HTTP
 
   resources:
     requests:

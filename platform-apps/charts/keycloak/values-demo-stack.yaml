@@ -5,7 +5,7 @@ keycloak:
   readinessProbe:
     httpGet:
       path: /health/ready
-      port: 9000
+      port: 8080 
       scheme: HTTP
     periodSeconds: 20
     failureThreshold: 5
@@ -15,7 +15,7 @@ keycloak:
   livenessProbe:
     httpGet:
       path: /health/live
-      port: 9000
+      port: 8080 
       scheme: HTTP
     periodSeconds: 20
     failureThreshold: 5
@@ -25,7 +25,7 @@ keycloak:
   startupProbe:
     httpGet:
       path: /health/started
-      port: 9000
+      port: 8080 
       scheme: HTTP
     periodSeconds: 20
     failureThreshold: 5

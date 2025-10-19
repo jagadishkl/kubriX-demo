@@ -2,35 +2,8 @@ keycloak:
   ingress:
     enabled: false
 
-  readinessProbe:
-    httpGet:
-      path: /q/health/ready
-      port: 8080
-      scheme: HTTP
-    periodSeconds: 10
-    failureThreshold: 6
-    successThreshold: 1
-    timeoutSeconds: 3
-
-  livenessProbe:
-    httpGet:
-      path: /q/health/live
-      port: 8080
-      scheme: HTTP
-    periodSeconds: 10
-    failureThreshold: 6
-    successThreshold: 1
-    timeoutSeconds: 3
-
-  startupProbe:
-    httpGet:
-      path: /q/health/started
-      port: 8080
-      scheme: HTTP
-    periodSeconds: 10
-    failureThreshold: 18
-    successThreshold: 1
-    timeoutSeconds: 3
+  extraStartupArgs:
+    - "start"
 
   resources:
     requests:
@@ -117,7 +90,7 @@ kubrix:
           roles:
             - grafana-editor
             - vault-editor
-          members: 
+          members:
             - phac
             - jokl
             - demouser
@@ -156,3 +129,4 @@ cluster:
       argocd.argoproj.io/sync-wave: "-1"
   backups:
     enabled: false
+

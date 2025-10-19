@@ -1,44 +1,22 @@
 keycloak:
   ingress:
+  # ingress tls not implemented yet, we need to create our own ingress resource
     enabled: false
 
   readinessProbe:
-    httpGet:
-      path: /q/health/ready
-      port: 8080
-      scheme: HTTP
-    periodSeconds: 10
-    failureThreshold: 6
-    successThreshold: 1
-    timeoutSeconds: 3
-
+    periodSeconds: 20
+    failureThreshold: 5
   livenessProbe:
-    httpGet:
-      path: /q/health/live
-      port: 8080
-      scheme: HTTP
-    periodSeconds: 10
-    failureThreshold: 6
-    successThreshold: 1
-    timeoutSeconds: 3
-
+    periodSeconds: 20
+    failureThreshold: 5
   startupProbe:
-    httpGet:
-      path: /q/health/started
-      port: 8080
-      scheme: HTTP
-    periodSeconds: 10
-    failureThreshold: 18
-    successThreshold: 1
-    timeoutSeconds: 3
-
-  extraStartupArgs:
-    - "start"
+    periodSeconds: 20
+    failureThreshold: 5
 
   resources:
     requests:
       memory: "512Mi"
-      cpu: "150m"
+      cpu: "300m"
     limits:
       memory: "1Gi"
       cpu: "1"
@@ -51,6 +29,8 @@ keycloak:
       value: "true"
     - name: "health-enabled"
       value: "true"
+
+    # serviceMonitor: # not yet implemented in keycloak, https://github.com/keycloak/keycloak/issues/40406, we need to create our own servicemonitor
 
   db:
     usernameSecret:

@@ -2,37 +2,20 @@ keycloak:
   ingress:
     enabled: false
 
-  http:
-    httpEnabled: true
-    httpPort: 8080
-    httpsPort: 8443
-
-  httpManagement:
-    port: 8080
-
   readinessProbe:
-    periodSeconds: 20
-    failureThreshold: 5
-    httpGet:
-      path: /q/health/ready
-      port: 8080
-      scheme: HTTP
+    periodSeconds: 10
+    failureThreshold: 6
 
   livenessProbe:
-    periodSeconds: 20
-    failureThreshold: 5
-    httpGet:
-      path: /q/health/live
-      port: 8080
-      scheme: HTTP
+    periodSeconds: 10
+    failureThreshold: 6
 
   startupProbe:
-    periodSeconds: 20
-    failureThreshold: 5
-    httpGet:
-      path: /q/health/started
-      port: 8080
-      scheme: HTTP
+    periodSeconds: 10
+    failureThreshold: 18
+
+  extraStartupArgs:
+    - "start"
 
   resources:
     requests:
@@ -50,8 +33,6 @@ keycloak:
       value: "true"
     - name: "health-enabled"
       value: "true"
-
-    # serviceMonitor: # not yet implemented in keycloak, https://github.com/keycloak/keycloak/issues/40406, we need to create our own servicemonitor
 
   db:
     usernameSecret:
@@ -75,7 +56,7 @@ kubrix:
         nginx.ingress.kubernetes.io/backend-protocol: HTTP
         cert-manager.io/cluster-issuer: mkcert-issuer
       className: nginx
-    domainName: .127-0-0-1.nip.io # add to prefix keycloak in templates
+    domainName: .127-0-0-1.nip.io
     realm:
       realmid: kubrix
       users:
@@ -121,12 +102,11 @@ kubrix:
           roles:
             - grafana-editor
             - vault-editor
-          members: 
+          members:
             - phac
             - jokl
             - demouser
-        - name: backstage-admin # for service-account permission workaround
-    # start with 2FA mobile Authenticators
+        - name: backstage-admin
     mfa:
       enabled: false
 
@@ -146,15 +126,15 @@ cluster:
       secret:
         name: cnpg-keycloak-secret
     roles:
-    - name: keycloak
-      ensure: present
-      comment: keycloak-admin-user
-      login: true
-      inherit: true
-      superuser: true
-      createdb: true
-      passwordSecret:
-        name: cnpg-keycloak-secret
+      - name: keycloak
+        ensure: present
+        comment: keycloak-admin-user
+        login: true
+        inherit: true
+        superuser: true
+        createdb: true
+        passwordSecret:
+          name: cnpg-keycloak-secret
     annotations:
       argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
       argocd.argoproj.io/sync-wave: "-1"

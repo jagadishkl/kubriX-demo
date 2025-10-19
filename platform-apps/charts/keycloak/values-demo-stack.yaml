@@ -1,45 +1,44 @@
 keycloak:
   ingress:
-  # ingress tls not implemented yet, we need to create our own ingress resource
     enabled: false
 
-readinessProbe:
-  httpGet:
-    path: /health/ready
-    port: 9000 
-    scheme: HTTP
-  periodSeconds: 20
-  failureThreshold: 5
-  successThreshold: 1
-  timeoutSeconds: 1
+  readinessProbe:
+    httpGet:
+      path: /health/ready
+      port: 9000
+      scheme: HTTP
+    periodSeconds: 20
+    failureThreshold: 5
+    successThreshold: 1
+    timeoutSeconds: 1
 
-livenessProbe:
-  httpGet:
-    path: /health/live
-    port: 9000 
-    scheme: HTTP
-  periodSeconds: 20
-  failureThreshold: 5
-  successThreshold: 1
-  timeoutSeconds: 1
+  livenessProbe:
+    httpGet:
+      path: /health/live
+      port: 9000
+      scheme: HTTP
+    periodSeconds: 20
+    failureThreshold: 5
+    successThreshold: 1
+    timeoutSeconds: 1
 
-startupProbe:
-  httpGet:
-    path: /health/started
-    port: 9000 
-    scheme: HTTP
-  periodSeconds: 20
-  failureThreshold: 5
-  successThreshold: 1
-  timeoutSeconds: 1
+  startupProbe:
+    httpGet:
+      path: /health/started
+      port: 9000
+      scheme: HTTP
+    periodSeconds: 20
+    failureThreshold: 5
+    successThreshold: 1
+    timeoutSeconds: 1
 
-resources:
-  requests:
-    memory: "512Mi"
-    cpu: "150m"
-  limits:
-    memory: "1Gi"
-    cpu: "1"
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "150m"
+    limits:
+      memory: "1Gi"
+      cpu: "1"
 
   networkPolicy:
     enabled: false
@@ -50,8 +49,6 @@ resources:
     - name: "health-enabled"
       value: "true"
 
-    # serviceMonitor: # not yet implemented in keycloak, https://github.com/keycloak/keycloak/issues/40406, we need to create our own servicemonitor
-
   db:
     usernameSecret:
       name: cp-keycloak-externaldb-secret
@@ -60,8 +57,6 @@ resources:
       name: cp-keycloak-externaldb-secret
       key: POSTGRES_PASSWORD
     port: 5432
-    host: sv-keycloak-cluster-rw
-    database: keycloak
 
 #### kubrix
 kubrix:
